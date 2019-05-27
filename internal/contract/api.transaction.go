@@ -2,9 +2,9 @@ package contract
 
 // TransactionRequest ...
 type TransactionRequest struct {
-	ToAccountNumber   int64 `json:"to_account_number"`
-	FromAccountNumber int64 `json:"from_account_number"`
-	Amount            int64 `json:"amount"`
+	ToAccountNumber   int64   `json:"to_account_number"`
+	FromAccountNumber int64   `json:"from_account_number"`
+	Amount            float64 `json:"amount"`
 }
 
 // TransactionResponse ...

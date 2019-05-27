@@ -15,6 +15,7 @@ type Response struct {
 
 // Write is to make response of http
 func Write(w http.ResponseWriter, response interface{}, statusCode ...int) {
+
 	if len(statusCode) > 0 {
 		w.WriteHeader(statusCode[0])
 	}
@@ -24,11 +25,14 @@ func Write(w http.ResponseWriter, response interface{}, statusCode ...int) {
 // Send ...
 func Send(r *http.Request, w http.ResponseWriter, response Response, errDelivery *deliveryerror.Error) {
 
+	w.Header().Set("Content-Type", "application/json")
+
 	if errDelivery != nil {
 		response.Error = errDelivery
 		Write(w, response, http.StatusInternalServerError)
 		return
 	}
 
+	w.WriteHeader(200)
 	Write(w, response)
 }

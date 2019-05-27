@@ -2,9 +2,16 @@ package transaction
 
 import (
 	"errors"
+	"fmt"
+
+	"github.com/zainul/txn/internal/pkg/error/usecaseerror"
+	"github.com/zainul/txn/internal/pkg/randomdigit"
+
+	"github.com/zainul/txn/internal/contract"
 
 	"github.com/zainul/txn/internal/constant"
 	"github.com/zainul/txn/internal/entity"
+	"github.com/zainul/txn/internal/pkg/error/deliveryerror"
 	"github.com/zainul/txn/internal/repository"
 )
 
@@ -19,6 +26,51 @@ type Usecase struct {
 	TxHistoryRepo   repository.TransactionHistory
 	TxLogRepo       repository.TransactionLog
 	UserAccountRepo repository.UserAccount
+}
+
+// InternalTransfer is internal transfer method
+func (t *Usecase) InternalTransfer(txnParam contract.TransactionRequest) (contract.TransactionResponse, *deliveryerror.Error) {
+	txID, err := t.Transfer(txnParam, constant.TransferMemberToMemberCode)
+
+	return contract.TransactionResponse{
+		TransactionID: txID,
+	}, err
+}
+
+// Transfer is transfer as general
+func (t *Usecase) Transfer(transfer contract.TransactionRequest, transactionCode string) (string, *deliveryerror.Error) {
+	fromAcc, toAcc, errFrom, errTo := t.ValidateUserAccount(transfer.FromAccountNumber, transfer.ToAccountNumber)
+
+	if errFrom != nil {
+		return "", deliveryerror.GetError(usecaseerror.InvalidFromAccountNumber, errFrom)
+	}
+
+	if errTo != nil {
+		return "", deliveryerror.GetError(usecaseerror.InvalidToAccountNumber, errTo)
+	}
+
+	if !t.ValidBalancePreTransaction(fromAcc, transfer.Amount) {
+		return "", deliveryerror.GetError(usecaseerror.InsufficientBalance, errors.New(usecaseerror.InsufficientBalance))
+	}
+
+	// Generate trx ID
+	txID, err := randomdigit.GenerateRandomString(49)
+
+	if err != nil {
+		return "", deliveryerror.GetError(usecaseerror.NotFoundCode, err)
+	}
+
+	txLog := makeRule(fromAcc, toAcc, transactionCode, transfer.Amount, txID)
+
+	err = t.TxLogRepo.Transfer(txLog)
+
+	if err != nil {
+		msgErr := deliveryerror.GetError(usecaseerror.FailedToTransfer, err)
+		msgErr.ErrorMsg = fmt.Sprintf(msgErr.ErrorMsg, transfer.FromAccountNumber, transfer.ToAccountNumber)
+		return "", msgErr
+	}
+
+	return txID, nil
 }
 
 // ValidateUserAccount is account available or not

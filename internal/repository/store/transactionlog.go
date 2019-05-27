@@ -83,7 +83,7 @@ func (s *TransactionLogStore) Transfer(e []entity.TransactionLog) error {
 					transaction_status = $2 
 				where tx_id = $3 and account_number = $4
 				RETURNING end_balance`
-			qUpdateUserAccount = `update user_account set balance = balance - $1 where user_id = $2`
+			qUpdateUserAccount = `update user_account set balance = balance - $1 where account_number = $2`
 		} else if val.DrCr == constant.CR {
 			qUpdateTransactionLog = `update transaction_log 
 				set 
@@ -91,7 +91,7 @@ func (s *TransactionLogStore) Transfer(e []entity.TransactionLog) error {
 					transaction_status = $2 
 				where tx_id = $3 and account_number = $4
 				RETURNING end_balance`
-			qUpdateUserAccount = `update user_account set balance = balance + $1 where user_id = $2`
+			qUpdateUserAccount = `update user_account set balance = balance + $1 where account_number = $2`
 		}
 
 		errLog := tx.Raw(qUpdateTransactionLog, val.Amount, constant.TransactionStatusSuccess, val.TxID, val.AccountNumber).Scan(&user).Error

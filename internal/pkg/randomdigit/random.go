@@ -3,11 +3,7 @@ package randomdigit
 import (
 	"crypto/rand"
 	"encoding/base64"
-	"fmt"
-	"math/big"
-	"strconv"
 	"strings"
-	"time"
 )
 
 const (
@@ -33,43 +29,22 @@ func GenerateRandomBytes(n int) ([]byte, error) {
 // GenerateRandomString returns a URL-safe, base64 encoded
 // securely generated random string.
 func GenerateRandomString(s int) (string, error) {
-	b, err := GenerateRandomBytes(s)
-	return strings.ToUpper(base64.URLEncoding.EncodeToString(b)), err
-}
+	var (
+		b   []byte
+		err error
+	)
 
-// GenerateRandomInt ...
-func GenerateRandomInt() (int64, error) {
-	nBig, err := rand.Int(rand.Reader, big.NewInt(maxBigInt))
-	if err != nil {
-		return time.Now().Unix(), nil
-	}
-
-	n := nBig.Int64()
-
-	return n, nil
-
-}
-
-// GenerateUserID ...
-func GenerateUserID() int64 {
-	var ID int64
-	uid, _ := GenerateRandomInt()
-
-	nanoTime := time.Now().Nanosecond()
-
-	strTime := strconv.Itoa(nanoTime)
-	timeID := fmt.Sprintf("%s%s", strTime, fmt.Sprintf("%06d", uid))[0:17]
-	idNotValidate, err := strconv.ParseInt(timeID, 10, 64)
+	b, err = GenerateRandomBytes(s + 15)
 
 	if err != nil {
-		ID = idNotValidate
+		return "", err
 	}
 
-	for {
-		if ID >= maxBigInt {
-			ID = GenerateUserID()
-		} else {
-			return ID
-		}
-	}
+	str := strings.ToUpper(base64.URLEncoding.EncodeToString(b))
+
+	str = strings.Replace(str, "=", "", -1)
+	str = strings.Replace(str, "-", "", -1)
+	str = strings.Replace(str, "_", "", -1)
+	return str[0:s], nil
+
 }

@@ -3,13 +3,21 @@ package usecaseerror
 var OwnErrors map[string]string
 
 const (
-	NotFoundCode = "E000000"
+	NotFoundCode             = "E000000"
+	InvalidToAccountNumber   = "E000001"
+	InvalidFromAccountNumber = "E000002"
+	InsufficientBalance      = "E000003"
+	FailedToTransfer         = "E000004"
 )
 
-func NewError() {
+func init() {
 	errs := make(map[string]string)
 
-	errs[NotFoundCode] = "00000"
+	errs[NotFoundCode] = "Unexpected error"
+	errs[InvalidFromAccountNumber] = "Invalid from account number"
+	errs[InvalidToAccountNumber] = "Invalid to account number"
+	errs[InsufficientBalance] = "Insufficient balance"
+	errs[FailedToTransfer] = "Failed to transfer from %s to %s"
 	OwnErrors = errs
 }
 
@@ -18,5 +26,5 @@ func GetCode(err string) string {
 		return val
 	}
 
-	return NotFoundCode
+	return OwnErrors[NotFoundCode]
 }

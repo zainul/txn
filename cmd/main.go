@@ -47,8 +47,14 @@ func main() {
 	r := mux.NewRouter()
 
 	userStore := store.NewUserAccountStore(db)
+	txLogStore := store.NewTransactionLogStore(db)
+	txHistoryStore := store.NewTransactionHistoryStore(db)
+
 	usecaseUser := usecase.NewUser(userStore)
+	usecaeTransaction := usecase.NewTransaction(txHistoryStore, txLogStore, userStore)
+
 	ownhttp.NewUserHanlder(r, usecaseUser)
+	ownhttp.NewTxHanlder(r, usecaeTransaction)
 
 	r.Use(commonMiddleware)
 

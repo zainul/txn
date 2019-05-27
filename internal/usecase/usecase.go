@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"github.com/zainul/txn/internal/contract"
+	"github.com/zainul/txn/internal/pkg/error/deliveryerror"
 	"github.com/zainul/txn/internal/repository"
 	"github.com/zainul/txn/internal/usecase/transaction"
 	"github.com/zainul/txn/internal/usecase/user"
@@ -9,7 +10,7 @@ import (
 
 // Transaction ...
 type Transaction interface {
-	InternalTransfer(txnParam contract.TransactionRequest) (contract.TransactionResponse, error)
+	InternalTransfer(txnParam contract.TransactionRequest) (contract.TransactionResponse, *deliveryerror.Error)
 }
 
 // User ...
@@ -33,5 +34,9 @@ func NewTransaction(
 	txLogStore repository.TransactionLog,
 	userAccountStore repository.UserAccount,
 ) *transaction.Usecase {
-	return &transaction.Usecase{}
+	return &transaction.Usecase{
+		TxHistoryRepo:   txHistoryStore,
+		TxLogRepo:       txLogStore,
+		UserAccountRepo: userAccountStore,
+	}
 }
