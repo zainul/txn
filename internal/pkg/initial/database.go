@@ -18,7 +18,7 @@ type Config struct {
 
 func init() {
 
-	if _, err := toml.DecodeFile("./configs/config.toml", &conf); err != nil {
+	if _, err := toml.DecodeFile("../configs/config.toml", &conf); err != nil {
 		panic(err)
 	}
 

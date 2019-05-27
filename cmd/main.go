@@ -11,7 +11,10 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	ownhttp "github.com/zainul/txn/internal/delivery/http"
 	"github.com/zainul/txn/internal/pkg/initial"
+	"github.com/zainul/txn/internal/repository/store"
+	"github.com/zainul/txn/internal/usecase"
 )
 
 func commonMiddleware(next http.Handler) http.Handler {
@@ -42,6 +45,10 @@ func main() {
 	}
 
 	r := mux.NewRouter()
+
+	userStore := store.NewUserAccountStore(db)
+	usecaseUser := usecase.NewUser(userStore)
+	ownhttp.NewUserHanlder(r, usecaseUser)
 
 	r.Use(commonMiddleware)
 

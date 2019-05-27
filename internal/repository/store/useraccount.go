@@ -1,6 +1,8 @@
-package postgres
+package store
 
 import (
+	"time"
+
 	"github.com/jinzhu/gorm"
 	"github.com/zainul/txn/internal/entity"
 )
@@ -17,6 +19,8 @@ func NewUserAccountStore(conn *gorm.DB) *UserAccountStore {
 }
 
 func (s *UserAccountStore) Insert(e entity.UserAccount) error {
+	now := time.Now()
+	e.Modified = now
 	return s.DB.Create(&e).Error
 }
 

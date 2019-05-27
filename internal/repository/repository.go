@@ -33,4 +33,5 @@ type TransactionLog interface {
 	TransactionLogBy(field string, value interface{}) ([]entity.TransactionLog, error)
 	RawQuery(sql string, result interface{}) error
 	RawExec(query string, param ...interface{}) error
+	Transfer(e []entity.TransactionLog) error
 }
