@@ -1,0 +1,7 @@
+[database]
+server = "localhost"
+port = "5432"
+name = "txn"
+user = "postgres"
+password = "root"
+provider = "postgres"
