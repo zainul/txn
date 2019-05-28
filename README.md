@@ -69,8 +69,9 @@ vegeta plot results.1000.qps.bin > plot.1000.html
 
 ## Test Result
 
-The result in laptop core i5 RAM 8 Gb doing well in 750 QPS, but the best result in 250 and 500 QPS
-actually for get more than 1000 TPS in my experience do it in real server , mostly when 750 QPS and 1000 QPS the postgres not enough to handle request
+The result in laptop core i5 RAM 8 Gb doing well in 750 QPS, but the best result in 250 and 500 QPS.
+
+Actually for get more than 1000 TPS in my experience do it in real server , mostly when 750 QPS and 1000 QPS the postgres not enough to handle request
 need more higher device
 
 ### 750 QPS
