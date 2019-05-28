@@ -36,6 +36,9 @@ func init() {
 		panic(err)
 	}
 
+	dbConn.DB().SetMaxIdleConns(20)
+	dbConn.DB().SetMaxOpenConns(50)
+
 	db = dbConn
 
 	fmt.Println("database is running ....")
@@ -43,6 +46,6 @@ func init() {
 
 // GetDB ...
 func GetDB() *gorm.DB {
-	db = db.LogMode(true)
+	// db = db.LogMode(true)
 	return db
 }

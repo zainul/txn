@@ -1,19 +1,19 @@
 {
     "project_package":"github.com/zainul/txn",
-    "dir":"/home/zainul/go/src/github.com/zainul/txn/migrations",
-    "conn":"user=postgres password=root dbname=txn host=localhost port=5432 sslmode=disable",
-    "seed_dir":"/home/zainul/go/src/github.com/zainul/txn/migrations",
+    "dir":"/home/nakama/go/src/github.com/zainul/txn/migrations",
+    "conn":"user=postgres password=ZainToped dbname=txn host=localhost port=5432 sslmode=disable",
+    "seed_dir":"/home/nakama/go/src/github.com/zainul/txn/migrations",
     "project_structure": {
         "entity":{
-            "dir":"/home/zainul/go/src/github.com/zainul/txn/internal/entity",
+            "dir":"/home/nakama/go/src/github.com/zainul/txn/internal/entity",
             "template":""
         },
         "repository":{
-            "dir":"/home/zainul/go/src/github.com/zainul/txn/internal/repository",
+            "dir":"/home/nakama/go/src/github.com/zainul/txn/internal/repository",
             "template":""
         },
         "usecase":{
-            "dir":"/home/zainul/go/src/github.com/zainul/txn/internal/usecase",
+            "dir":"/home/nakama/go/src/github.com/zainul/txn/internal/usecase",
             "template":""
         }
     }

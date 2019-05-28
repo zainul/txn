@@ -11,6 +11,7 @@ import (
 // Transaction ...
 type Transaction interface {
 	InternalTransfer(txnParam contract.TransactionRequest) (contract.TransactionResponse, *deliveryerror.Error)
+	GetBalance(accountNumber int64) (contract.GetBalanceResponse, *deliveryerror.Error)
 }
 
 // User ...

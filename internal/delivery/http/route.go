@@ -25,4 +25,5 @@ func NewTxHanlder(route *mux.Router, tx usecase.Transaction) {
 	}
 
 	route.HandleFunc("/transfer/internal", handler.InternalTx).Methods(http.MethodPost)
+	route.HandleFunc("/user/balance/{account_number}", handler.GetBalance).Methods(http.MethodGet)
 }

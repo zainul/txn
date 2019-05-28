@@ -28,6 +28,24 @@ type Usecase struct {
 	UserAccountRepo repository.UserAccount
 }
 
+// GetBalance is use for get last balance of user
+func (t *Usecase) GetBalance(accountNumber int64) (contract.GetBalanceResponse, *deliveryerror.Error) {
+	res := contract.GetBalanceResponse{}
+
+	users, err := t.UserAccountRepo.UserAccountBy("account_number", accountNumber)
+
+	if err != nil {
+		return res, deliveryerror.GetError(usecaseerror.InvalidFromAccountNumber, err)
+	}
+
+	if len(users) > 0 {
+		res.LastBalance = users[0].Balance
+		res.AccountNumber = accountNumber
+	}
+
+	return res, nil
+}
+
 // InternalTransfer is internal transfer method
 func (t *Usecase) InternalTransfer(txnParam contract.TransactionRequest) (contract.TransactionResponse, *deliveryerror.Error) {
 	txID, err := t.Transfer(txnParam, constant.TransferMemberToMemberCode)
@@ -82,9 +100,15 @@ func (t *Usecase) ValidateUserAccount(from int64, to int64) (fromAcc entity.User
 		go func(userID int64) {
 			user, err := t.UserAccountRepo.UserAccountBy("account_number", userID)
 
+			var u *entity.UserAccount
+
+			if len(user) > 0 {
+				u = &user[0]
+			}
+
 			users <- userAccountChannel{
 				AccountID: userID,
-				User:      &user[0],
+				User:      u,
 				Err:       err,
 			}
 		}(val)
