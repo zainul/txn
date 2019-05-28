@@ -60,6 +60,10 @@ func (s *TransactionLogStore) Transfer(e []entity.TransactionLog) error {
 
 	// Insert to log
 	for _, val := range e {
+		txTime := time.Now()
+		val.Date = txTime
+		val.LastUpdate = txTime
+
 		errInsert := tx.Create(&val).Error
 		if errInsert != nil {
 			tx.Rollback()
