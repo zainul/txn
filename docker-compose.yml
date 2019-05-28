@@ -1,0 +1,13 @@
+version: '3'
+services:
+  postgresql:
+    container_name: postgresql
+    image: postgres:9.6.11
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    network_mode: host
+    logging:
+      driver: "none"
