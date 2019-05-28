@@ -124,5 +124,5 @@ Post http://localhost:7000/transfer/internal: EOF
 
 ```
 
-note : service can serve and handle the request and reponse time is under 5ms in 95 percentile
+note : service can serve and handle the request and reponse time is under 50ms in 95 percentile
 
